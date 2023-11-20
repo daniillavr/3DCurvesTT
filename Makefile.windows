@@ -11,12 +11,16 @@ STATIC_OBJ_FILES = $(STATIC_OBJ_PATH)/Circle.obj $(STATIC_OBJ_PATH)/Helix.obj $(
 DLL_OBJ_FILES = $(DLL_OBJ_PATH)/Circle.obj $(DLL_OBJ_PATH)/Helix.obj $(DLL_OBJ_PATH)/Figure.obj $(DLL_OBJ_PATH)/Ellipse.obj
 LIB_H_FILES = $(FILES_PATH)/Circle.h $(FILES_PATH)/Helix.h $(FILES_PATH)/Figure.h $(FILES_PATH)/Ellipse.h
 
+all: DllLink
+
 StaticLink: createDirs StaticObj
     cl.exe /Fe$(BIN_PATH)/mainStatic.exe main.cpp $(STATIC_OBJ_FILES)
+    echo "Check result files in $(BIN_PATH) directory."
 
 DllLink: createDirs makedll
     cl.exe /DUSER_DLL_COMPILE_PROGRAM /Fe$(BIN_PATH)/mainDLL.exe main.cpp /link /LIBPATH:$(LIB_PATH) "curves.lib"
     copy $(LIB_PATH)\curves.dll $(BIN_PATH)\curves.dll
+    echo "Check result files in $(BIN_PATH) directory."
 
 StaticObj:
     $(CC) $(CPP_FLAGS_OBJ) /Fo$(STATIC_OBJ_PATH)/Circle.obj $(FILES_PATH)/Circle.cpp
