@@ -6,6 +6,7 @@
 - [x] Sort the second container in the ascending order of circles’ radii. That is, the first element has the smallest radius, the last - the greatest.
 - [x] Compute the total sum of radii of all curves in the second container.
 - [x] Split implementation into a library of curves (.dll or .so) and executable which uses API of this library.
+- [x] Makefile for Windows to make DLL or Static exe.
 
 Technical Task:
 
