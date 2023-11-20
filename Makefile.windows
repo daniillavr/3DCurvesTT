@@ -1,0 +1,42 @@
+BUILD_PATH = BUILD
+STATIC_OBJ_PATH = $(BUILD_PATH)\STATIC
+DLL_OBJ_PATH = $(BUILD_PATH)\DLL
+BIN_PATH = BIN
+FILES_PATH = curves
+LIB_PATH = lib
+CC = cl.exe
+CPP_FLAGS = /Wall
+CPP_FLAGS_OBJ = /c $(CPP_FLAGS)
+STATIC_OBJ_FILES = $(STATIC_OBJ_PATH)/Circle.obj $(STATIC_OBJ_PATH)/Helix.obj $(STATIC_OBJ_PATH)/Figure.obj $(STATIC_OBJ_PATH)/Ellipse.obj
+DLL_OBJ_FILES = $(DLL_OBJ_PATH)/Circle.obj $(DLL_OBJ_PATH)/Helix.obj $(DLL_OBJ_PATH)/Figure.obj $(DLL_OBJ_PATH)/Ellipse.obj
+LIB_H_FILES = $(FILES_PATH)/Circle.h $(FILES_PATH)/Helix.h $(FILES_PATH)/Figure.h $(FILES_PATH)/Ellipse.h
+
+StaticLink: createDirs StaticObj
+    cl.exe /Fe$(BIN_PATH)/mainStatic.exe main.cpp $(STATIC_OBJ_FILES)
+
+DllLink: createDirs makedll
+    cl.exe /DUSER_DLL_COMPILE_PROGRAM /Fe$(BIN_PATH)/mainDLL.exe main.cpp /link /LIBPATH:$(LIB_PATH) "curves.lib"
+    copy $(LIB_PATH)\curves.dll $(BIN_PATH)\curves.dll
+
+StaticObj:
+    $(CC) $(CPP_FLAGS_OBJ) /Fo$(STATIC_OBJ_PATH)/Circle.obj $(FILES_PATH)/Circle.cpp
+    $(CC) $(CPP_FLAGS_OBJ) /Fo$(STATIC_OBJ_PATH)/Helix.obj $(FILES_PATH)/Helix.cpp
+    $(CC) $(CPP_FLAGS_OBJ) /Fo$(STATIC_OBJ_PATH)/Figure.obj $(FILES_PATH)/Figure.cpp
+    $(CC) $(CPP_FLAGS_OBJ) /Fo$(STATIC_OBJ_PATH)/Ellipse.obj $(FILES_PATH)/Ellipse.cpp
+
+DLLObj:
+    $(CC) /DUSER_DLL_MAKE_DLL $(CPP_FLAGS_OBJ) /Fo$(DLL_OBJ_PATH)/Circle.obj $(FILES_PATH)/Circle.cpp
+    $(CC) /DUSER_DLL_MAKE_DLL $(CPP_FLAGS_OBJ) /Fo$(DLL_OBJ_PATH)/Helix.obj $(FILES_PATH)/Helix.cpp
+    $(CC) /DUSER_DLL_MAKE_DLL $(CPP_FLAGS_OBJ) /Fo$(DLL_OBJ_PATH)/Figure.obj $(FILES_PATH)/Figure.cpp
+    $(CC) /DUSER_DLL_MAKE_DLL $(CPP_FLAGS_OBJ) /Fo$(DLL_OBJ_PATH)/Ellipse.obj $(FILES_PATH)/Ellipse.cpp
+    
+
+makedll: DLLObj
+    cl.exe $(DLL_OBJ_FILES) /link /DLL /OUT:$(LIB_PATH)/curves.dll
+
+createDirs:
+    -mkdir $(BUILD_PATH)
+    -mkdir $(BIN_PATH)
+    -mkdir $(LIB_PATH)
+    -mkdir $(STATIC_OBJ_PATH)
+    -mkdir $(DLL_OBJ_PATH)

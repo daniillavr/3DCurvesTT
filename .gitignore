@@ -1,0 +1,5 @@
+.vs
+BIN
+BUILD
+lib
+*.obj
